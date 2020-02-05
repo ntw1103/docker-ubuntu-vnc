@@ -7,6 +7,7 @@ To build:
 
 ```bash
 $ make build
+$docker build -t vnc .
 ```
 
 To run:
@@ -19,6 +20,7 @@ which is a shorthand for:
 
 ```bash
 $ docker run --rm -ti -p 5901:5901 --name docker-ubuntu panta/docker-ubuntu-vnc:latest
+$ docker run --network=host -td vnc
 ```
 
 To get a shell on a running container:
