@@ -28,12 +28,12 @@ RUN apt-get update -q && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/
-
+ENV VNCPASSWORD password
 RUN mkdir -p /root/.vnc
 COPY xstartup /root/.vnc/
 RUN chmod a+x /root/.vnc/xstartup
 RUN touch /root/.vnc/passwd
-RUN /bin/bash -c "echo -e 'password\npassword\nn' | vncpasswd" > /root/.vnc/passwd
+RUN /bin/bash -c "echo -e '$VNCPASSWORD\n$VNCPASSWORD\nn' | vncpasswd" > /root/.vnc/passwd
 RUN chmod 400 /root/.vnc/passwd
 RUN chmod go-rwx /root/.vnc
 RUN touch /root/.Xauthority
@@ -49,10 +49,12 @@ mkdir -p /opt/steamcmd &&\
 RUN echo "mycontainer" > /etc/hostname
 RUN echo "127.0.0.1	localhost" > /etc/hosts
 RUN echo "127.0.0.1	mycontainer" >> /etc/hosts && \
-echo "/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +login ntw1103 +force_install_dir dinos  +app_update 70000 validate +quit" >> /root/install_dinos.sh && \
-echo "/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +login ntw1103 +force_install_dir dinos  +app_update 70010 validate +quit" >> /root/install_dinos.sh && chmod +x /root/install_dinos.sh
+ENV STEAMUSER blank
+echo "/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +login $STEAMUSER +force_install_dir dinos  +app_update 70000 validate +quit" >> /root/install_dinos.sh && \
+echo "/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +login $STEAMUSER +force_install_dir dinos  +app_update 70010 validate +quit" >> /root/install_dinos.sh && chmod +x /root/install_dinos.sh
 
 COPY generic.dat /root/.config/q4wine/db/generic.dat
 EXPOSE 5901 27015 27005 27020 26901 9877
 ENV USER root
 CMD [ "/root/start-vncserver.sh" ]
+
