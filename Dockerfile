@@ -48,13 +48,14 @@ mkdir -p /opt/steamcmd &&\
 
 RUN echo "mycontainer" > /etc/hostname
 RUN echo "127.0.0.1	localhost" > /etc/hosts
-RUN echo "127.0.0.1	mycontainer" >> /etc/hosts && \
 ENV STEAMUSER blank
+RUN echo "127.0.0.1	mycontainer" >> /etc/hosts && \
 echo "/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +login $STEAMUSER +force_install_dir dinos  +app_update 70000 validate +quit" >> /root/install_dinos.sh && \
 echo "/opt/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +login $STEAMUSER +force_install_dir dinos  +app_update 70010 validate +quit" >> /root/install_dinos.sh && chmod +x /root/install_dinos.sh
 
 COPY generic.dat /root/.config/q4wine/db/generic.dat
-EXPOSE 5901 27015 27005 27020 26901 9877
+COPY Server.cfg /opt/steamcmd/dinos/Server.cfg
+EXPOSE 5901 27015 27005 27020 26901 9877 7777
 ENV USER root
 CMD [ "/root/start-vncserver.sh" ]
 
